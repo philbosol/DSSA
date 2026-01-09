@@ -9,6 +9,7 @@
  * License: GPL v2 or later
  * Text Domain: dssa-pmpro-helper
  * Domain Path: /languages
+ * Tags: membership, Paid Memberships Pro, WordPress, DSSA
  */
 
 defined('ABSPATH') || exit;
@@ -16,7 +17,6 @@ defined('ABSPATH') || exit;
 /* ============================================================
  * CONSTANTS
  * ============================================================ */
-
 define('DSSA_PMPRO_HELPER_VERSION', '3.0.0');
 define('DSSA_PMPRO_HELPER_PATH', plugin_dir_path(__FILE__));
 define('DSSA_PMPRO_HELPER_URL', plugin_dir_url(__FILE__));
@@ -25,7 +25,6 @@ define('DSSA_PMPRO_HELPER_FILE', __FILE__);
 /* ============================================================
  * GLOBAL HELPERS
  * ============================================================ */
-
 function dssa_pmpro_helper_get_setting($key, $default = '') {
 	$value = get_option("dssa_pmpro_helper_{$key}", $default);
 	return apply_filters("dssa_pmpro_helper_setting_{$key}", $value);
@@ -47,28 +46,24 @@ function dssa_pmpro_helper_log($message, $data = null) {
 /* ============================================================
  * REQUIREMENTS CHECK
  * ============================================================ */
-
 function dssa_pmpro_helper_check_requirements() {
-
 	if (!class_exists('PMPro_Membership_Level')) {
 		add_action('admin_notices', function () {
 			echo '<div class="notice notice-error"><p>';
-			echo esc_html__('Paid Memberships Pro is required.', 'dssa-pmpro-helper');
+			echo esc_html__('Paid Memberships Pro is required for the DSSA PMPro Helper plugin to function properly.', 'dssa-pmpro-helper');
 			echo '</p></div>';
 		});
 		return false;
 	}
-
 	return true;
 }
 
 /* ============================================================
  * MAIN BOOTSTRAP (FRONTEND + ADMIN)
  * ============================================================ */
-
 function dssa_pmpro_helper_init() {
-
 	if (!dssa_pmpro_helper_check_requirements()) {
+		dssa_pmpro_helper_log('Paid Memberships Pro dependency missing.');
 		return;
 	}
 
@@ -92,7 +87,12 @@ function dssa_pmpro_helper_init() {
 	];
 
 	foreach ($files as $file) {
-		require_once DSSA_PMPRO_HELPER_PATH . $file;
+		$file_path = DSSA_PMPRO_HELPER_PATH . $file;
+		if (file_exists($file_path)) {
+			require_once $file_path;
+		} else {
+			dssa_pmpro_helper_log("Missing required file: {$file_path}");
+		}
 	}
 
 	$classes = [
@@ -105,39 +105,31 @@ function dssa_pmpro_helper_init() {
 		'DSSA_PMPro_Helper_Registration',
 		'DSSA_PMPro_Helper_Membership_Levels',
 		'DSSA_PMPro_Helper_Login_System',
-		'DSSA_PMPro_Helper_Branch_Management',
 	];
 
 	foreach ($classes as $class) {
 		if (class_exists($class) && method_exists($class, 'init')) {
 			$class::init();
+		} else {
+			dssa_pmpro_helper_log("Failed initializing class: {$class}");
 		}
 	}
 }
-
-/**
- * IMPORTANT:
- * Must run on frontend BEFORE PMPro renders checkout
- */
-add_action('plugins_loaded', 'dssa_pmpro_helper_init', 5);
+add_action('plugins_loaded', 'dssa_pmpro_helper_init');
 
 /* ============================================================
  * ADMIN-ONLY INTERFACE
  * ============================================================ */
-
 add_action('plugins_loaded', function () {
-
-	if (!is_admin()) {
-		return;
-	}
-
-	$admin_file = DSSA_PMPRO_HELPER_PATH . 'includes/class-admin-interface.php';
-
-	if (file_exists($admin_file)) {
-		require_once $admin_file;
-
-		if (class_exists('DSSA_PMPro_Helper_Admin_Interface')) {
-			DSSA_PMPro_Helper_Admin_Interface::init();
+	if (is_admin()) {
+		$admin_file = DSSA_PMPRO_HELPER_PATH . 'includes/class-admin-interface.php';
+		if (file_exists($admin_file)) {
+			require_once $admin_file;
+			if (class_exists('DSSA_PMPro_Helper_Admin_Interface')) {
+				DSSA_PMPro_Helper_Admin_Interface::init();
+			}
+		} else {
+			dssa_pmpro_helper_log("Missing admin interface file: {$admin_file}");
 		}
 	}
 });
@@ -145,19 +137,19 @@ add_action('plugins_loaded', function () {
 /* ============================================================
  * ACTIVATION / DEACTIVATION
  * ============================================================ */
-
 register_activation_hook(__FILE__, function () {
-
 	if (!class_exists('PMPro_Membership_Level')) {
 		deactivate_plugins(plugin_basename(__FILE__));
-		wp_die(__('Paid Memberships Pro must be active.', 'dssa-pmpro-helper'));
+		wp_die(__('Paid Memberships Pro must be active to use this plugin.', 'dssa-pmpro-helper'));
 	}
 
 	require_once DSSA_PMPRO_HELPER_PATH . 'includes/class-database.php';
 	DSSA_PMPro_Helper_Database::create_tables();
+	dssa_pmpro_helper_log('Plugin activated and database tables created.');
 });
 
 register_deactivation_hook(__FILE__, function () {
 	wp_clear_scheduled_hook('dssa_pmpro_helper_daily_renewal_check');
 	wp_clear_scheduled_hook('dssa_pmpro_helper_daily_audit_cleanup');
+	dssa_pmpro_helper_log('Plugin deactivated and scheduled hooks cleared.');
 });
