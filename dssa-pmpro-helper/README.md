@@ -1,138 +1,165 @@
-# DSSA PMPro Helper - Phase 1 Testing Guide
+# DSSA PMPro Helper Plugin
 
-## 📋 Prerequisites
-1. WordPress 6.0+ with PHP 8.0+
-2. Paid Memberships Pro (Free version) activated
-3. PMPro checkout page accessible at `/membership-checkout/`
+## Overview
+Custom membership management system for the Dendrological Society of South Africa (DSSA). This plugin extends Paid Memberships Pro with specialized features for managing DSSA memberships, legacy member numbers, branch assignments, and South African payment integrations.
 
-## 🚀 Installation Steps
+## Requirements
+- WordPress 6.0 or higher
+- PHP 8.0 or higher
+- Paid Memberships Pro plugin (free version)
+
+## Features
+- Legacy membership number management
+- CSV import/export for member data
+- Branch management (28 South African branches)
+- Custom checkout fields with bilingual labels (English/Afrikaans)
+- Real-time membership number validation
+- Paystack payment fee calculations
+- Comprehensive audit logging
+- User profile field management
+- Custom admin interface
+
+## Installation
 
 ### Option A: Manual Installation
 1. Download the plugin folder
 2. Upload to `/wp-content/plugins/dssa-pmpro-helper/`
 3. Activate plugin in WordPress admin
-4. Check for any activation errors
+4. Configure settings under Settings → DSSA PMPro Helper
 
 ### Option B: ZIP Installation
 1. Create a ZIP of the plugin folder
 2. Upload via WordPress Plugin → Add New → Upload Plugin
 3. Activate the plugin
 
-## 🧪 Testing Checklist
+## Development
 
-### Phase 1A: Basic Functionality
-- [ ] Plugin activates without errors
-- [ ] Database tables are created (check phpMyAdmin)
-- [ ] Settings page loads at Settings → DSSA PMPro Helper
-- [ ] Legacy Members page loads at Memberships → Legacy Members
+### Code Standards
+This plugin follows WordPress Coding Standards and modern PHP best practices:
+- PHP 8.0+ type declarations
+- Comprehensive error handling
+- Extensive inline documentation
+- Localization support (South African English)
+- Security-first approach with input validation and sanitization
 
-### Phase 1B: Settings Configuration
-- [ ] All settings tabs load without errors
-- [ ] Settings can be saved and persist
-- [ ] Email settings accept multiple addresses
-- [ ] Date calculations show correct next renewal date
-- [ ] Paystack fee calculator shows correct amounts
-- [ ] Validation messages can be edited
+### File Structure
+```
+dssa-pmpro-helper/
+├── dssa-pmpro-helper.php    # Main plugin file
+├── uninstall.php             # Uninstall handler
+├── composer.json             # Composer configuration
+├── includes/                 # Core classes
+│   ├── class-database.php
+│   ├── class-settings.php
+│   ├── class-checkout-fields.php
+│   ├── class-audit-log.php
+│   ├── class-security.php
+│   ├── class-legacy-members.php
+│   ├── class-membership-levels.php
+│   ├── class-registration.php
+│   ├── class-branch-management.php
+│   ├── class-login-system.php
+│   └── class-admin-interface.php
+├── assets/                   # CSS, JS, images
+└── languages/                # Translation files
+    └── dssa-pmpro-helper.pot
+```
 
-### Phase 1C: Legacy Members Management
-1. **CSV Upload Test:**
-   - Download `test-legacy-numbers.csv`
-   - Go to Memberships → Legacy Members
-   - Upload the CSV file
-   - Verify 30 numbers imported successfully
+### Architecture
+The plugin uses a modular architecture with separate classes for different concerns:
 
-2. **Table Functionality:**
-   - Search for "DSSA2024015"
-   - Filter by "Unclaimed" status
-   - Test pagination (if more than 20 items)
-   - Edit a legacy number via the Edit button
-   - Delete a test number
+1. **Database Management** - Handles custom tables for legacy numbers, audit logs, and branches
+2. **Settings** - Tab-based settings interface with WordPress Settings API
+3. **Checkout Fields** - Custom PMPro checkout field integration
+4. **Legacy Members** - CSV import/export and number management
+5. **Security** - Permission checks and nonce verification
+6. **Audit Log** - Tracks all member-related actions
+7. **Registration** - Custom registration workflows
+8. **Branch Management** - Geographic branch assignment
+9. **Login System** - Custom authentication features
+10. **Admin Interface** - Main admin menu and dashboard
 
-3. **Export Test:**
-   - Select a few numbers with checkboxes
-   - Choose "Export Selected" from bulk actions
-   - Download should start with CSV file
+### Class Initialization
+Classes are loaded and initialized in the main plugin file using a controlled bootstrap process:
+1. Constants defined
+2. Helper functions registered
+3. Requirements checked (PMPro dependency)
+4. Text domain loaded for translations
+5. Class files included with error handling
+6. Classes initialized with dynamic method checking
 
-### Phase 1D: Checkout Page Testing
-1. **As a New User:**
-   - Go to `/membership-checkout/`
-   - Verify bilingual field labels appear
-   - First/Last Name should be with account fields
-   - DSSA Membership Information section appears
+### Composer Integration
+A composer.json file is included for:
+- Dependency management
+- PSR-4 autoloading preparation (future enhancement)
+- Development tools (PHPCS, etc.)
 
-2. **Conditional Field Logic:**
-   - Check "Existing Member" → Shows Member Number & Branch
-   - Uncheck → Shows Card Payments
-   - Branch dropdown shows all 28 DSSA branches
+To install development dependencies:
+```bash
+composer install --dev
+```
 
-3. **Legacy Number Validation:**
-   - Check "Existing Member"
-   - Enter "DSSA2024001" (from test CSV)
-   - Should show green success message
-   - Enter invalid number → red error message
+To check code standards:
+```bash
+composer phpcs
+```
 
-### Phase 1E: Registration Testing
-1. **Legacy Member Registration:**
-   - Complete checkout with valid legacy number
-   - Registration should complete without payment
-   - Check user meta has legacy flags
-   - Legacy number should show as "claimed" in admin
+To automatically fix code style issues:
+```bash
+composer phpcbf
+```
 
-2. **New Member Registration:**
-   - Complete checkout without checking "Existing Member"
-   - With/without "Card Payments" checked
-   - Verify fields saved to user meta
+### Future Enhancements
+- Full PSR-4 namespace implementation
+- Automated testing suite (PHPUnit)
+- Continuous integration (GitHub Actions)
+- REST API endpoints
+- Enhanced reporting and analytics
 
-### Phase 1F: User Profile Testing
-1. **As Admin:**
-   - Go to Users → Edit a test user
-   - DSSA Membership Information section appears
-   - Should be able to edit all fields
-   - Conditional logic works (shows/hides based on legacy status)
+## Localization
+The plugin is translation-ready with:
+- Text domain: `dssa-pmpro-helper`
+- Domain path: `/languages`
+- POT template file included
+- South African English as primary language
 
-2. **As Regular User:**
-   - Go to your profile page
-   - DSSA fields should be read-only
-   - Cannot edit the fields
+To create a translation:
+1. Use the `.pot` file in `/languages` directory
+2. Create a `.po` file for your locale (e.g., `dssa-pmpro-helper-af_ZA.po` for Afrikaans)
+3. Compile to `.mo` file
+4. Place in `/languages` directory
 
-## 🐛 Troubleshooting
+## Security
+The plugin implements multiple security layers:
+- Nonce verification for all forms
+- Capability checks for admin actions
+- Input sanitization and validation
+- Output escaping
+- SQL injection prevention via prepared statements
+- XSS prevention
 
-### Common Issues:
-1. **JavaScript errors:** Check browser console (F12)
-2. **AJAX failures:** Enable debug logging in DSSA settings
-3. **CSV upload fails:** Check file permissions and PHP limits
-4. **Fields not showing:** Clear cache, test with default theme
+## Support
+For issues and support:
+- GitHub: https://github.com/philbosol/DSSA
+- Website: https://dendro.co.za
 
-### Debug Steps:
-1. Enable WP_DEBUG in wp-config.php
-2. Check WordPress debug.log
-3. Test with all other plugins deactivated
-4. Test with default WordPress theme
+## License
+GPL v2 or later
 
-## 📊 Expected Results
+## Credits
+- **Author**: Phil Meyer / RMM New Generation Marketing
+- **Website**: https://rmmm.co.za
+- **Organization**: Dendrological Society of South Africa
 
-### Database After Installation:
-- 3 new tables: `wp_dssa_legacy_numbers`, `wp_dssa_audit_log`, `wp_dssa_branches`
-- 28 branches automatically inserted
-- 30+ settings in wp_options
+## Changelog
 
-### User Experience:
-- Smooth checkout with conditional fields
-- Real-time legacy number validation
-- Admin-friendly CSV management
-- Comprehensive audit logging
-
-## 🔜 Next Phase Features (Not Yet Implemented)
-- Payment calculations (pro-rata, Paystack fees)
-- Membership level assignment logic
-- New member approval workflow
-- Custom login/password reset system
-- Main DSSA Admin menu structure
-- Reports and analytics
-
-## 📞 Support
-For issues during testing, check:
-1. WordPress error logs
-2. Browser console errors
-3. DSSA debug logging (if enabled)
-4. Plugin compatibility with your theme/other plugins
+### Version 3.0.0
+- Enhanced plugin initialization with comprehensive error handling
+- Improved dependency management with graceful degradation
+- Added localization support with .pot template file
+- Comprehensive inline documentation following PHPDoc standards
+- Better admin notices for missing dependencies
+- Enhanced activation/deactivation hooks with logging
+- Security improvements throughout
+- Added Composer support for modern development workflow
+- Improved code organization and maintainability

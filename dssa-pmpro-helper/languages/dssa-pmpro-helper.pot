@@ -1,0 +1,131 @@
+# Copyright (C) 2026 Phil Meyer / RMM New Generation Marketing
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: DSSA PMPro Helper 3.0.0\n"
+"Report-Msgid-Bugs-To: https://dendro.co.za\n"
+"POT-Creation-Date: 2026-01-09 19:00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2026-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: South African English\n"
+"Language: en_ZA\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: dssa-pmpro-helper.php:XX
+msgid "The DSSA PMPro Helper plugin requires %s to be installed and activated. Some features may not function correctly."
+msgstr ""
+
+#: dssa-pmpro-helper.php:XX
+msgid "DSSA PMPro Helper: Required file not found: %s"
+msgstr ""
+
+#: dssa-pmpro-helper.php:XX
+msgid "%s must be installed and activated before activating this plugin."
+msgstr ""
+
+#: dssa-pmpro-helper.php:XX
+msgid "Plugin Activation Error"
+msgstr ""
+
+#: dssa-pmpro-helper.php:XX
+msgid "Failed to create database tables: %s"
+msgstr ""
+
+#: dssa-pmpro-helper.php:XX
+msgid "Database Error"
+msgstr ""
+
+#: includes/class-security.php:XX
+msgid "Security check failed. Please try again."
+msgstr ""
+
+#: includes/class-audit-log.php:XX
+msgid "User not found"
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "Please enter a membership number."
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "Please select a branch."
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "Membership number assigned successfully!"
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "Branch assigned successfully!"
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "Error"
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "Error assigning data. Please try again."
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "Assigning..."
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "Permission denied."
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "Invalid data."
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "Invalid field."
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "DSSA Admin"
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "Dashboard"
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "Legacy Members"
+msgstr ""
+
+#: includes/class-admin-interface.php:XX
+msgid "Branch Management"
+msgstr ""
+
+#: includes/class-settings.php:XX
+msgid "General Settings"
+msgstr ""
+
+#: includes/class-settings.php:XX
+msgid "Email Settings"
+msgstr ""
+
+#: includes/class-settings.php:XX
+msgid "Date & Renewal Settings"
+msgstr ""
+
+#: includes/class-settings.php:XX
+msgid "Paystack Fee Settings"
+msgstr ""
+
+#: includes/class-settings.php:XX
+msgid "Validation Messages"
+msgstr ""
+
+#: includes/class-settings.php:XX
+msgid "Renewal Processing"
+msgstr ""
+
+#: includes/class-settings.php:XX
+msgid "DSSA PMPro Helper Settings"
+msgstr ""

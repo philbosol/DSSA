@@ -1,0 +1,46 @@
+{
+    "name": "philbosol/dssa-pmpro-helper",
+    "description": "Custom membership management system for Dendrological Society of South Africa",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "version": "3.0.0",
+    "require": {
+        "php": ">=8.0",
+        "composer/installers": "^1.0 || ^2.0"
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "DSSA\\PMProHelper\\": "src/"
+        },
+        "files": [
+            "dssa-pmpro-helper.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Phil Meyer",
+            "email": "phil@rmmm.co.za"
+        },
+        {
+            "name": "RMM New Generation Marketing",
+            "homepage": "https://rmmm.co.za"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/philbosol/DSSA/issues",
+        "source": "https://github.com/philbosol/DSSA"
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "classmap-authoritative": false,
+        "preferred-install": "dist"
+    },
+    "scripts": {
+        "phpcs": "phpcs --standard=WordPress --extensions=php .",
+        "phpcbf": "phpcbf --standard=WordPress --extensions=php ."
+    }
+}
